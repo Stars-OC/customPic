@@ -40,6 +40,20 @@
 `pic listAllPic` 列出所有存在的图片  
 `pic listTagPic tag(要设置的标签名称)` 这个就是查看该tag下有多少张图片
 
+### 具体使用
+```
+对于添加权限
+如果你有chat-command的全部权限的话直接跳过 
+/permission add QQ(你的QQ号) xyz.starsoc.custompic:*
+然后添加群聊/pic addGroup 1234(用1234代替群聊)
+最后添加权限给在这个群聊的人/pic addPer 123456(在1234群聊中给123456加权限)
+
+对于添加Tag到群下(下面用test代替tag)
+pic addTag test 创建test的tag
+pic down test 一张图片(加入图片  如果没有可以先跳过)
+pic extendTo test 在要加test的群使用这个指令
+然后使用pic get test 或者 来张test 就可以获取图片了
+```
 ## 配置文件
 主要的配置文件存在于`config\xyz.starsoc.customPic`中的`config`文件  
 ```
