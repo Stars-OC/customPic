@@ -65,3 +65,7 @@ againCMD:
   - 再来一张
   - again
 ```
+
+## 后文
+如果有什么问题可以点击左上角的[Issues](https://github.com/Stars-OC/customPic/issues)进行报告，如果看到我会及时处理    
+如果有什么好的建议，也可以进行提交。
