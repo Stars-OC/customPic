@@ -49,7 +49,7 @@
 最后添加权限给在这个群聊的人/pic addPer 123456(在1234群聊中给123456加权限)
 
 对于添加Tag到群下(下面用test代替tag)
-pic addTag test 创建test的tag
+pic addTag test 创建test的tag(其实用pic down可以直接创建加存储test)
 pic down test 一张图片(加入图片  如果没有可以先跳过)
 pic extendTo test 在要加test的群使用这个指令
 然后使用pic get test 或者 来张test 就可以获取图片了
