@@ -1,5 +1,7 @@
 package xyz.starsoc.Event;
 
+import kotlin.coroutines.CoroutineContext;
+import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.SimpleListenerHost;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
@@ -24,14 +26,14 @@ public class groupMsg extends SimpleListenerHost {
     private Set<String> permission = config.getPermission();
     private Map<String, List<String>> tagList = imgData.getList();
     private message messageConfig = message.INSTANCE;
-//    @Override
-//    public void handleException(@NotNull CoroutineContext context, @NotNull Throwable exception) {
-//        System.out.println("error1 :" + context);
-//        System.out.println("error2 :" + exception);
-//        Bot bot = Bot.getInstance(config.getBot());
-//        bot.getFriend(config.getMaster()).sendMessage("customPic插件出现报错，请检查后台信息");
-//        // 处理事件处理时抛出的异常
-//    }
+    @Override
+    public void handleException(@NotNull CoroutineContext context, @NotNull Throwable exception) {
+        System.out.println("error1 :" + context);
+        System.out.println("error2 :" + exception);
+        Bot bot = Bot.getInstance(config.getBot());
+        bot.getFriend(config.getMaster()).sendMessage("customPic插件出现报错，请检查后台信息");
+        // 处理事件处理时抛出的异常
+    }
 
     @EventHandler
     public void onMessage(@NotNull GroupMessageEvent event) throws Exception {// 可以抛出任何异常, 将在 handleException 处理
