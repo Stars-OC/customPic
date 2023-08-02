@@ -6,9 +6,9 @@ import net.mamoe.mirai.console.data.value
 import xyz.starsoc.File.config.provideDelegate
 
 object config : AutoSavePluginConfig("config") {
-    val Bot by value(123)
+    val Bot : Long by value()
     @ValueDescription("最高权限")
-    val Master by value(123456)
+    val Master : Long by value()
     val imagePath by value("")
     @ValueDescription("启用群聊")
     val Group : Set<Long> by value(mutableSetOf(1234))
