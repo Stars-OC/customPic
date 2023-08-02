@@ -17,7 +17,7 @@ public final class CustomPic extends JavaPlugin{
     public static final String path = CustomPic.INSTANCE.getDataHolderName();
     public static imageUtil imageUtil;
     private CustomPic(){
-        super(new JvmPluginDescriptionBuilder("xyz.starsoc.customPic","0.1.0")
+        super(new JvmPluginDescriptionBuilder("xyz.starsoc.customPic","0.1.1")
                 .name("customPic")
                 .author("Clusters_stars")
                 .build());
@@ -26,6 +26,9 @@ public final class CustomPic extends JavaPlugin{
     public void onEnable(){
         reload();
         imageUtil = new imageUtil(config.INSTANCE.getImagePath());
+        System.out.println("=========customPic==========");
+        System.out.println("启动成功，图片目录创建在" + "data\\" + path + "\\Pic" + "目录下");
+        System.out.println("当前版本 0.1.1");
         CommandManager.INSTANCE.registerCommand(command.INSTANCE,true);
         GlobalEventChannel.INSTANCE.registerListenerHost(new groupMsg());
     }

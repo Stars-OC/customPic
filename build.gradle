@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'xyz.starsoc'
-version = '0.1.0'
+version = '0.1.1'
 
 repositories {
     maven { url "https://maven-central-asia.storage-download.googleapis.com/maven2/" }
