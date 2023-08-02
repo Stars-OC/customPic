@@ -55,11 +55,11 @@ public class groupMsg extends SimpleListenerHost {
             //后续用list支持回复消息
         }
 
-        if(!user.containsKey(userKey)){
-            user.put(userKey,plain);
-        }
+        //解决Map存储对象过多的问题
         if(plain == null){
-            user.put(userKey,plain);
+            if(user.containsKey(userKey)){
+                user.remove(userKey);
+            }
             return;
         }
         //getPic
@@ -67,26 +67,29 @@ public class groupMsg extends SimpleListenerHost {
         if (prefix != null){
             String tag = getSuffix(prefix,plain);
             if(!extended.containsKey(groupID) || !extended.get(groupID).contains(tag)){
-                user.put(userKey,plain);
+                user.remove(userKey);
                 return;
             }
             getPic(tag);
             user.put(userKey,tag);
             return;
         }
+
 //        if(true){
 //            return;
 //        }
-
-        String userValue = user.get(userKey);
-        if(againCMD.contains(plain)){
-            if(!tagList.containsKey(userValue)){
+        if(user.containsKey(userKey)){
+            String userValue = user.get(userKey);
+            if(againCMD.contains(plain)){
+                if(!tagList.containsKey(userValue)){
+                    return;
+                }
+                getPic(userValue);
                 return;
             }
-            getPic(userValue);
-            return;
         }
-        user.put(userKey,plain);
+
+
         if(!plain.startsWith("pic ")){
             return;
         }
@@ -107,6 +110,9 @@ public class groupMsg extends SimpleListenerHost {
             return;
         }
         CMD(getSuffix("pic ",plain));
+        if(user.containsKey(userKey)){
+            user.remove(userKey);
+        }
     }
     private void CMD(String cmd){
         String[] command = cmd.split(" ");
@@ -224,7 +230,7 @@ public class groupMsg extends SimpleListenerHost {
             send.sendTagText(messageConfig.getNoTag(),tag,file);
             return;
         }
-        String msg = file.downPic(tag.replace(" ",""), url);
+        String msg = file.downPic(tag.replace(" ","").replace("\n",""), url);
         send.sendText(msg,file);
     }
 }
