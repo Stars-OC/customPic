@@ -17,7 +17,7 @@ public class imageUtil {
         this.imagePath = imagePath;
 
         if(imagePath == null || imagePath == ""){
-            this.imagePath = "data\\" + CustomPic.path + "\\Pic";
+            this.imagePath = "data/" + CustomPic.path + "/Pic";
         }
         //CustomPic.imagePath = this.imagePath;
         createFile();
@@ -27,7 +27,7 @@ public class imageUtil {
             return false;
         }
         BufferedImage buf = null;
-        File file = new File(imagePath + "\\" +  pic + ".png");
+        File file = new File(imagePath + "/" +  pic + ".png");
         try {
             buf = ImageIO.read(new URL(url));
             if(buf != null){
@@ -45,7 +45,7 @@ public class imageUtil {
         if(pic == null || !list.contains(pic)){
             return false;
         }
-        File file = new File(imagePath + "\\" +  pic + ".png");
+        File file = new File(imagePath + "/" +  pic + ".png");
         list.remove(pic);
         if (!file.exists()){
             return false;
@@ -57,7 +57,7 @@ public class imageUtil {
         if(pic == null ||!list.contains(pic)){
             return null;
         }
-        File file = new File(imagePath + "\\" +  pic + ".png");
+        File file = new File(imagePath + "/" +  pic + ".png");
         if(!file.exists()){
             list.remove(pic);
             return null;
