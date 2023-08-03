@@ -5,13 +5,18 @@ import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.SimpleListenerHost;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
-import net.mamoe.mirai.message.data.*;
+import net.mamoe.mirai.message.data.Image;
+import net.mamoe.mirai.message.data.PlainText;
+import net.mamoe.mirai.message.data.SingleMessage;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jetbrains.annotations.NotNull;
 import xyz.starsoc.File.*;
 import xyz.starsoc.Message.send;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class groupMsg extends SimpleListenerHost {
     private config config = xyz.starsoc.File.config.INSTANCE;
@@ -42,7 +47,7 @@ public class groupMsg extends SimpleListenerHost {
         if(!groups.contains(groupID)){
             return;
         }
-        file = new fileOperationer(event.getBot(),groupID);
+
         String userKey = groupID + ":" + userID;
         String plain = null;
         Image image = null;
@@ -57,11 +62,11 @@ public class groupMsg extends SimpleListenerHost {
 
         //解决Map存储对象过多的问题
         if(plain == null){
-            if(user.containsKey(userKey)){
-                user.remove(userKey);
-            }
+            user.remove(userKey);
             return;
         }
+        //优化file创建的时机
+        file = new fileOperationer(event.getBot(),groupID);
         //getPic
         String prefix = judgePrefix(plain);
         if (prefix != null){
@@ -71,6 +76,7 @@ public class groupMsg extends SimpleListenerHost {
                 return;
             }
             getPic(tag);
+            //get成功才会将user放进去
             user.put(userKey,tag);
             return;
         }
@@ -82,6 +88,7 @@ public class groupMsg extends SimpleListenerHost {
             String userValue = user.get(userKey);
             if(againCMD.contains(plain)){
                 if(!tagList.containsKey(userValue)){
+                    user.remove(userKey);
                     return;
                 }
                 getPic(userValue);
@@ -110,9 +117,7 @@ public class groupMsg extends SimpleListenerHost {
             return;
         }
         CMD(getSuffix("pic ",plain));
-        if(user.containsKey(userKey)){
-            user.remove(userKey);
-        }
+        user.remove(userKey);
     }
     private void CMD(String cmd){
         String[] command = cmd.split(" ");
