@@ -1,9 +1,6 @@
 package xyz.starsoc.File;
 
 import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
-import net.mamoe.mirai.message.data.Image;
-import net.mamoe.mirai.utils.ExternalResource;
 import xyz.starsoc.CustomPic;
 
 import java.io.File;

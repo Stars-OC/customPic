@@ -8,10 +8,6 @@ import xyz.starsoc.Event.command;
 import xyz.starsoc.Event.groupMsg;
 import xyz.starsoc.File.*;
 
-import java.beans.EventHandler;
-import java.util.HashSet;
-import java.util.Set;
-
 public final class CustomPic extends JavaPlugin{
     public static final CustomPic INSTANCE=new CustomPic();
     public static final String path = CustomPic.INSTANCE.getDataHolderName();
@@ -27,7 +23,7 @@ public final class CustomPic extends JavaPlugin{
         reload();
         imageUtil = new imageUtil(config.INSTANCE.getImagePath());
         System.out.println("=========customPic==========");
-        System.out.println("启动成功，图片目录创建在" + "data\\" + path + "\\Pic" + "目录下");
+        System.out.println("启动成功，图片目录创建在" + "\ndata\\" + path + "\\Pic" + "目录下");
         System.out.println("当前版本 0.1.1");
         CommandManager.INSTANCE.registerCommand(command.INSTANCE,true);
         GlobalEventChannel.INSTANCE.registerListenerHost(new groupMsg());

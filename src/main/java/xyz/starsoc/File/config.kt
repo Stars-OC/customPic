@@ -3,7 +3,6 @@ package xyz.starsoc.File
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
-import xyz.starsoc.File.config.provideDelegate
 
 object config : AutoSavePluginConfig("config") {
     val Bot : Long by value()
