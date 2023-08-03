@@ -87,16 +87,11 @@ public class groupMsg extends SimpleListenerHost {
         if(user.containsKey(userKey)){
             String userValue = user.get(userKey);
             if(againCMD.contains(plain)){
-                if(!tagList.containsKey(userValue)){
-                    user.remove(userKey);
-                    return;
-                }
                 getPic(userValue);
                 return;
             }
         }
-
-
+        user.remove(userKey);
         if(!plain.startsWith("pic ")){
             return;
         }
