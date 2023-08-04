@@ -9,6 +9,7 @@ group = 'xyz.starsoc'
 version = '0.1.1'
 
 repositories {
+    mavenLocal()
     maven { url "https://maven-central-asia.storage-download.googleapis.com/maven2/" }
 
     maven { url 'https://maven.aliyun.com/repository/public' }
