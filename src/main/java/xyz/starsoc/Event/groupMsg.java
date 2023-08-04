@@ -100,8 +100,11 @@ public class groupMsg extends SimpleListenerHost {
             return;
         }
         if(!permission.contains(userKey)){
-            event.getGroup().sendMessage(messageConfig.getNoPEX());
-            return;
+            //增加最高权限通过验证
+            if(config.getMaster() != userID){
+                event.getGroup().sendMessage(messageConfig.getNoPEX());
+                return;
+            }
         }
         if(plain.startsWith("pic down ")){
             if(image != null){
