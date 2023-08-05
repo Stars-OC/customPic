@@ -1,7 +1,10 @@
 package xyz.starsoc.Event;
 
+import jdk.jpackage.internal.Log;
 import kotlin.coroutines.CoroutineContext;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.contact.Contact;
+import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.SimpleListenerHost;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
@@ -10,9 +13,11 @@ import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.message.data.SingleMessage;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jetbrains.annotations.NotNull;
+import xyz.starsoc.CustomPic;
 import xyz.starsoc.File.*;
 import xyz.starsoc.Message.send;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +35,7 @@ public class groupMsg extends SimpleListenerHost {
     private Set<String> againCMD = config.getAgainCMD();
     private Set<String> permission = config.getPermission();
     private Map<String, List<String>> tagList = imgData.getList();
+    private Map<Long,fileOperationer> files = new HashMap<>();
     private message messageConfig = message.INSTANCE;
     @Override
     public void handleException(@NotNull CoroutineContext context, @NotNull Throwable exception) {
@@ -66,7 +72,13 @@ public class groupMsg extends SimpleListenerHost {
             return;
         }
         //优化file创建的时机
-        file = new fileOperationer(event.getBot(),groupID);
+        if(files.containsKey(groupID)){
+            file = files.get(groupID);
+        }else {
+            file = new fileOperationer(event.getBot(),groupID);
+            ++CustomPic.files;
+            files.put(groupID,file);
+        }
         //getPic
         String prefix = judgePrefix(plain);
         if (prefix != null){
@@ -147,15 +159,19 @@ public class groupMsg extends SimpleListenerHost {
                 listAllPic += "...]";
                 send.sendText(listAllPic,file);
                 return;
+            case "debug":
+                System.out.println("========fileOperationer=======");
+                System.out.println("对象创建:" + fileOperationer.getCount() + "次");
+                System.out.println("对象剩余:" + CustomPic.files + "次");
+                System.out.println("=========user - Map==========");
+                System.out.println("user剩余:" + user.size());
+                System.out.println("user Info:" + user.toString());
+                return;
             default:
                 if(command.length < 2) {
                     send.sendText(messageConfig.getErrorCMD(), file);
                     return;
                 }
-        }
-        if(command.length < 2){
-            send.sendText(messageConfig.getErrorCMD(),file);
-            return;
         }
         String tag = command[1];
         switch (command[0]){
@@ -200,6 +216,7 @@ public class groupMsg extends SimpleListenerHost {
                 listTagPic += "...]";
                 send.sendText(listTagPic,file);
                 return;
+
             default:
                 send.sendText(messageConfig.getErrorCMD(), file);
 
@@ -227,6 +244,7 @@ public class groupMsg extends SimpleListenerHost {
         }
         Image image = file.getBot().getGroup(file.getGroup()).uploadImage(ExternalResource.create(file.getImage()).toAutoCloseable());
         send.sendImage(image,file);
+
     }
     private void downPic(String tag,String url) {
         if (tag == null||tag == ""){

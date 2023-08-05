@@ -12,6 +12,7 @@ public final class CustomPic extends JavaPlugin{
     public static final CustomPic INSTANCE=new CustomPic();
     public static final String path = CustomPic.INSTANCE.getDataHolderName();
     public static imageUtil imageUtil;
+    public static int files;
     private CustomPic(){
         super(new JvmPluginDescriptionBuilder("xyz.starsoc.customPic","0.1.1")
                 .name("customPic")

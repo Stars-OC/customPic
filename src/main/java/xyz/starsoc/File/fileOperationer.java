@@ -10,6 +10,7 @@ public class fileOperationer {
     /**
      * 这一层只用管 imageConfig 文件的CRUD
      */
+
     private Long group;
     private imageData imgData = imageData.INSTANCE;
     private message message = xyz.starsoc.File.message.INSTANCE;
@@ -21,13 +22,19 @@ public class fileOperationer {
 
     private File image;
     private Bot bot;
+    private static int count;
     public fileOperationer(Bot bot, Long group) {
         this.bot = bot;
         this.group = group;
         if(!extended.containsKey(group)){
             extended.put(group,new HashSet<>());
         }
+        ++count;
         set = extended.get(group);
+    }
+
+    public static int getCount() {
+        return count;
     }
 
     public Long getGroup() {
@@ -142,5 +149,10 @@ public class fileOperationer {
     //暂时不写删除
     public void deletePic(){
 
+    }
+    //debug判断是否被回收
+    @Override
+    protected void finalize() throws Throwable {
+        --CustomPic.files;
     }
 }
