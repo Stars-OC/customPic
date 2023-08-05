@@ -1,10 +1,7 @@
 package xyz.starsoc.Event;
 
-import jdk.jpackage.internal.Log;
 import kotlin.coroutines.CoroutineContext;
 import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.contact.Contact;
-import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.SimpleListenerHost;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
@@ -17,7 +14,6 @@ import xyz.starsoc.CustomPic;
 import xyz.starsoc.File.*;
 import xyz.starsoc.Message.send;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,9 +159,12 @@ public class groupMsg extends SimpleListenerHost {
                 System.out.println("========fileOperationer=======");
                 System.out.println("对象创建:" + fileOperationer.getCount() + "次");
                 System.out.println("对象剩余:" + CustomPic.files + "次");
-                System.out.println("=========user - Map==========");
+                System.out.println("========user - map========");
                 System.out.println("user剩余:" + user.size());
                 System.out.println("user Info:" + user.toString());
+                System.out.println("========files - map========");
+                System.out.println("files剩余:" + files.size());
+                System.out.println("files Info:" + files.toString());
                 return;
             default:
                 if(command.length < 2) {
