@@ -14,6 +14,7 @@ object message : AutoSavePluginConfig("message") {
     val successedDown by value("添加成功")
     val noPEX by value("没有权限")
     val errorCMD by value("命名参数不对，请检查参数")
+    val notGetUrl by value("获取失败，图片已失效")
 
     val successedAdd by value("添加 %tag% 成功")
     val notAdd by value("添加 %tag% 失败")

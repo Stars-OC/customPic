@@ -9,6 +9,8 @@ object config : AutoSavePluginConfig("config") {
     @ValueDescription("最高权限")
     val Master : Long by value()
     val imagePath by value("")
+    @ValueDescription("存储多少历史图片\n也就是如果设置多的话，以往消息就能够获取到图片进行下载\n但是相对应的所占内存会变高")
+    val mapSize by value(30)
     @ValueDescription("启用群聊")
     val Group : Set<Long> by value(mutableSetOf(1234))
     @ValueDescription("权限管理\n也就是1234群的管理员是123456")

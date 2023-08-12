@@ -5,19 +5,14 @@ import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.SimpleListenerHost;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
-import net.mamoe.mirai.message.data.Image;
-import net.mamoe.mirai.message.data.PlainText;
-import net.mamoe.mirai.message.data.SingleMessage;
+import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jetbrains.annotations.NotNull;
 import xyz.starsoc.CustomPic;
 import xyz.starsoc.File.*;
 import xyz.starsoc.Message.send;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class groupMsg extends SimpleListenerHost {
     private config config = xyz.starsoc.File.config.INSTANCE;
@@ -32,15 +27,16 @@ public class groupMsg extends SimpleListenerHost {
     private Set<String> permission = config.getPermission();
     private Map<String, List<String>> tagList = imgData.getList();
     private Map<Long,fileOperationer> files = new HashMap<>();
+    private Map<Integer,String> url = Collections.synchronizedMap(new TreeMap<>());
     private message messageConfig = message.INSTANCE;
-    @Override
-    public void handleException(@NotNull CoroutineContext context, @NotNull Throwable exception) {
-        System.out.println("error1 :" + context);
-        System.out.println("error2 :" + exception);
-        Bot bot = Bot.getInstance(config.getBot());
-        bot.getFriend(config.getMaster()).sendMessage("customPic插件出现报错，请检查后台信息");
-        // 处理事件处理时抛出的异常
-    }
+//    @Override
+//    public void handleException(@NotNull CoroutineContext context, @NotNull Throwable exception) {
+//        System.out.println("error1 :" + context);
+//        System.out.println("error2 :" + exception.getMessage());
+//        Bot bot = Bot.getInstance(config.getBot());
+//        bot.getFriend(config.getMaster()).sendMessage("customPic插件出现报错，请检查后台信息");
+//        // 处理事件处理时抛出的异常
+//    }
 
     @EventHandler
     public void onMessage(@NotNull GroupMessageEvent event) throws Exception {// 可以抛出任何异常, 将在 handleException 处理
@@ -53,15 +49,31 @@ public class groupMsg extends SimpleListenerHost {
         String userKey = groupID + ":" + userID;
         String plain = null;
         Image image = null;
+        String imageId = null;
+        int id = 0;
+        //event.getMessage().get(QuoteReply.Key).getSource().getOriginalMessage().get(Image.Key);
         for (SingleMessage message:  event.getMessage()){
             if (message instanceof PlainText){
                 plain = ((PlainText) message).getContent();
             }else if(message instanceof Image){
-                image = Image.fromId(((Image) message).getImageId());
+                //将支持引用回复
+                imageId = ((Image) message).getImageId();
+                image = Image.fromId(imageId);
+                System.out.println(Image.queryUrl(image));
+                //System.out.println(event.getSource().getIds()[0]);
+            }else if(message instanceof QuoteReply){
+                QuoteReply reply = (QuoteReply) message;
+                MessageChain chain = reply.getSource().getOriginalMessage();
+                if(chain.contentToString().contains("[图片]")){
+                    id = reply.getSource().getIds()[0];
+                }
+               //System.out.println(reply.getSource().getIds()[0]);
             }
             //后续用list支持回复消息
         }
-
+        if(image != null){
+            addUrl(event.getSource().getIds()[0],imageId);
+        }
         //解决Map存储对象过多的问题
         if(plain == null){
             user.remove(userKey);
@@ -114,16 +126,30 @@ public class groupMsg extends SimpleListenerHost {
                 return;
             }
         }
+
         if(plain.startsWith("pic down ")){
-            if(image != null){
-                downPic(getSuffix("pic down ",plain),Image.queryUrl(image));
+            if(id != 0){
+                String url = getUrl(id);
+                if(url == null){
+                    event.getGroup().sendMessage(messageConfig.getNotGetUrl());
+                    return;
+                }
+                down(plain,Image.fromId(url));
             }else {
-                event.getGroup().sendMessage(messageConfig.getNoImage());
+                down(plain,image);
             }
             return;
         }
         CMD(getSuffix("pic ",plain));
         user.remove(userKey);
+    }
+    private boolean down(String plain,Image image){
+        if(image != null){
+            downPic(getSuffix("pic down ",plain),Image.queryUrl(image));
+        }else {
+            send.sendText(messageConfig.getNoImage(),file);
+        }
+        return true;
     }
     private void CMD(String cmd){
         String[] command = cmd.split(" ");
@@ -165,6 +191,15 @@ public class groupMsg extends SimpleListenerHost {
                 System.out.println("========files - map========");
                 System.out.println("files剩余:" + files.size());
                 System.out.println("files Info:" + files.toString());
+                System.out.println("========url - map========");
+                System.out.println("url剩余:" + url.size());
+                System.out.println("url Info:" + url.toString());
+                return;
+            case "clear":
+                user.clear();
+                files.clear();
+                url.clear();
+                System.out.println("清除完成，所有内存已被清除");
                 return;
             default:
                 if(command.length < 2) {
@@ -252,5 +287,19 @@ public class groupMsg extends SimpleListenerHost {
         }
         String msg = file.downPic(tag.replace(" ","").replace("\n",""), url);
         send.sendText(msg,file);
+    }
+    private void addUrl(int id,String image){
+        if(url.size() >= config.getMapSize()){
+            url.remove(url.keySet().stream().findFirst().orElse(null));
+        }
+        url.put(id,image);
+    }
+    private String getUrl(int id){
+        if(!url.containsKey(id)){
+            return null;
+        }
+        String image = url.get(id);
+        url.remove(id);
+        return image;
     }
 }
