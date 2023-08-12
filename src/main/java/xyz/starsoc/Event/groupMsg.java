@@ -29,14 +29,14 @@ public class groupMsg extends SimpleListenerHost {
     private Map<Long,fileOperationer> files = new HashMap<>();
     private Map<Integer,String> url = Collections.synchronizedMap(new TreeMap<>());
     private message messageConfig = message.INSTANCE;
-//    @Override
-//    public void handleException(@NotNull CoroutineContext context, @NotNull Throwable exception) {
-//        System.out.println("error1 :" + context);
-//        System.out.println("error2 :" + exception.getMessage());
-//        Bot bot = Bot.getInstance(config.getBot());
-//        bot.getFriend(config.getMaster()).sendMessage("customPic插件出现报错，请检查后台信息");
-//        // 处理事件处理时抛出的异常
-//    }
+    @Override
+    public void handleException(@NotNull CoroutineContext context, @NotNull Throwable exception) {
+        System.out.println("error1 :" + context);
+        System.out.println("error2 :" + exception.getMessage());
+        Bot bot = Bot.getInstance(config.getBot());
+        bot.getFriend(config.getMaster()).sendMessage("customPic插件出现报错，请检查后台信息");
+        // 处理事件处理时抛出的异常
+    }
 
     @EventHandler
     public void onMessage(@NotNull GroupMessageEvent event) throws Exception {// 可以抛出任何异常, 将在 handleException 处理
@@ -59,7 +59,7 @@ public class groupMsg extends SimpleListenerHost {
                 //将支持引用回复
                 imageId = ((Image) message).getImageId();
                 image = Image.fromId(imageId);
-                System.out.println(Image.queryUrl(image));
+                //System.out.println(Image.queryUrl(image));
                 //System.out.println(event.getSource().getIds()[0]);
             }else if(message instanceof QuoteReply){
                 QuoteReply reply = (QuoteReply) message;
