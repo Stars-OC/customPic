@@ -39,8 +39,8 @@
 `pic listTag` 列出在使用此命令的群聊拥有的tags    
 `pic listAllPic` 列出所有存在的图片  
 `pic listTagPic tag(要设置的标签名称)` 这个就是查看该tag下有多少张图片
-`pic debug` 就是查看有多少占用的对象(debug的时候用 可以看看有多少占用)
-`pic clear` 将目前所有对象进行清除
+`pic debug` 就是查看有多少占用的对象(debug的时候用 可以看看有多少占用)      
+`pic clear` 将目前所有对象进行清除    
 
 ### 具体使用
 ```
