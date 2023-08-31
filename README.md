@@ -28,7 +28,7 @@
 #### 这个就是另一个指令集的管理权限运用
 `/pic addPer QQ号` 这个是给当前群该QQ使用另一个指令集的权限    
 `/pic deletePer QQ号` 这个便是删除当前群该QQ使用另一个指令集的权限   
-**注意这两个指令需要在要给权限的群里使用，否则会出现问题**可以进行at给权限
+**注意这两个指令需要在要给权限的群里使用，否则会出现问题**    
 
 #### 另一个指令集的使用
 `pic help`是一个很详细的部分指令集的查看
@@ -48,13 +48,16 @@
 如果你有chat-command的全部权限的话直接跳过 
 /permission add QQ(你的QQ号) xyz.starsoc.custompic:*
 然后添加群聊/pic addGroup 1234(用1234代替群聊)
-最后添加权限给在这个群聊的人/pic addPer 123456(在1234群聊中给123456加权限)
+**需要在1234群聊使用该命令    
+**最后添加权限给在这个群聊的人/pic addPer 123456(在1234群聊中给123456加权限)
 
 对于添加Tag到群下(下面用test代替tag)
 pic addTag test 创建test的tag(其实用pic down可以直接创建加存储test)
 pic down test 一张图片(加入图片  如果没有可以先跳过)
 pic extendTo test 在要加test的群使用这个指令
 然后使用pic get test 或者 来张test 就可以获取图片了
+
+如若有什么问题可以先试试其中的指令，会有一定的提示，目前文档还在开发中
 ```
 ## 配置文件
 主要的配置文件存在于`config\xyz.starsoc.customPic`中的`config`文件  
@@ -88,7 +91,7 @@ againCMD:
 
 ## 后文
 如果有什么问题可以点击左上角的[Issues](https://github.com/Stars-OC/customPic/issues)进行报告，如果看到我会及时处理    
-如果有什么好的建议，也可以进行提交。
+如果有什么好的建议或者新奇的想法，欢迎提交Issues。
 
 ## 更新
 `v0.2.0 customPic` 更新了可以使用QQ的**回复**功能进行下载图片     
