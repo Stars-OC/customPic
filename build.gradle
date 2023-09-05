@@ -1,9 +1,10 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
 
-    id 'net.mamoe.mirai-console' version '2.14.0'
+    id 'net.mamoe.mirai-console' version '2.15.0'
 }
+
 
 group = 'xyz.starsoc'
 version = '0.2.0'

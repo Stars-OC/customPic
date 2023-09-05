@@ -138,6 +138,9 @@ public class groupMsg extends SimpleListenerHost {
             }else {
                 down(plain,image);
             }
+            if(extended.containsKey(groupID) && !extended.get(groupID).contains(plain)){
+                extended.get(groupID).add(plain);
+            }
             return;
         }
         CMD(getSuffix("pic ",plain));
