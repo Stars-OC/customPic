@@ -64,10 +64,6 @@ public class groupMsg extends SimpleListenerHost {
                 //存储之前的图片 方便后面引用回复
                 imageId = ((Image) message).getImageId();
                 image = Image.fromId(imageId);
-                System.out.println(image.serializeToMiraiCode());
-                System.out.println(image.getImageType());
-                System.out.println(image.getImageType().name());
-                System.out.println(image.getImageType().toString());
                 //System.out.println(Image.queryUrl(image));
             }else if(message instanceof QuoteReply){
                 QuoteReply reply = (QuoteReply) message;
