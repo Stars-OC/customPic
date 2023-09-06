@@ -19,6 +19,7 @@ public class fileOperationer {
     private Map<Long, Set<String>> extended = imgData.getExtended();
     private Set<String> set;
     private imageUtil imageUtil = CustomPic.imageUtil;
+    private Set<String> call = imgData.getCall();
 
     private File image;
     private Bot bot;
@@ -61,7 +62,11 @@ public class fileOperationer {
         list.add(tag + "-1");
         tagList.put(tag,list);
     }
+    //好像这个方法可以直接用size :D
     private int getTagNum(List<String> arr){
+        if(arr.size() == 0){
+            return 0;
+        }
         String[] st = arr.get(arr.size()-1).split("-");
         int a = Integer.parseInt(st[st.length-1]);
         return ++a;
@@ -69,8 +74,23 @@ public class fileOperationer {
     private boolean addPic(String tag,String url){
         List<String> arr = tagList.get(tag);
         String image = tag + "-" + getTagNum(arr);
-        arr.add(image);
-        return imageUtil.addImage(image,url);
+        boolean addUrlImage = imageUtil.addUrlImage(image, url);
+        if(addUrlImage){
+            arr.add(image);
+        }
+        return addUrlImage;
+    }
+    private boolean addGIF(String tag,String url){
+        List<String> arr = tagList.get(tag);
+        int old = getTagNum(arr);
+        int num = imageUtil.addUrlGIF(old,tag,url);
+        if(num == 0){
+            return false;
+        }
+        for(int i = old;i < num;i++){
+            arr.add(tag + "-" + i);
+        }
+        return true;
     }
     //获取文件里extended中的pic是否存在 耦合度太高了(看不下去)
     private String getPic(String tag,Boolean upload){
@@ -98,14 +118,25 @@ public class fileOperationer {
         String getPic = getPic(tag,true);
         return getPic;
     }
-    public String downPic(String tag,String url){
+    public String downPic(String tag,String type,String url){
         if(!tagList.containsKey(tag) || tagList.get(tag).size() == 0){
-            initTagList(tag);
-            imageUtil.addImage(tag + "-1",url);
+            if(type.equals("gif")){
+                tagList.put(tag,new ArrayList<>());
+                addGIF(tag, url);
+            }else{
+                initTagList(tag);
+                imageUtil.addUrlImage(tag + "-1",url);
+            }
             return message.getSuccessedDown();
         }
         if(url == null || url == ""){
             return message.getNoUrl();
+        }
+        if(type.equals("gif")){
+            if(!addGIF(tag, url)){
+                return "error";
+            }
+            return message.getSuccessedAdd();
         }
         if(!addPic(tag,url)){
             return message.getNoNet();
@@ -145,6 +176,13 @@ public class fileOperationer {
         }
         set.remove(tag);
         return "Yes";
+    }
+    public boolean callTo(String tag){
+        if(!tagList.containsKey(tag)){
+            return false;
+        }
+        call.add(tag);
+        return true;
     }
     //暂时不写删除
     public void deletePic(){

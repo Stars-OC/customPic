@@ -12,6 +12,7 @@ import xyz.starsoc.CustomPic;
 import xyz.starsoc.File.*;
 import xyz.starsoc.Message.send;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class groupMsg extends SimpleListenerHost {
@@ -22,6 +23,7 @@ public class groupMsg extends SimpleListenerHost {
     private fileOperationer file;
     private HashMap<String,String> user = new HashMap<>();
     private Set<Long> groups = config.getGroup();
+    private Set<String> call = imgData.getCall();
     private Set<String> prefixCMD = config.getPrefixCMD();
     private Set<String> againCMD = config.getAgainCMD();
     private Set<String> permission = config.getPermission();
@@ -56,11 +58,11 @@ public class groupMsg extends SimpleListenerHost {
             if (message instanceof PlainText){
                 plain = ((PlainText) message).getContent();
             }else if(message instanceof Image){
-                //将支持引用回复
+                //存储之前的图片 方便后面引用回复
                 imageId = ((Image) message).getImageId();
                 image = Image.fromId(imageId);
+
                 //System.out.println(Image.queryUrl(image));
-                //System.out.println(event.getSource().getIds()[0]);
             }else if(message instanceof QuoteReply){
                 QuoteReply reply = (QuoteReply) message;
                 MessageChain chain = reply.getSource().getOriginalMessage();
@@ -86,6 +88,11 @@ public class groupMsg extends SimpleListenerHost {
             file = new fileOperationer(event.getBot(),groupID);
             ++CustomPic.files;
             files.put(groupID,file);
+        }
+        if(call.contains(plain)){
+            getPic(plain);
+            user.put(userKey,plain);
+            return;
         }
         //getPic
         String prefix = judgePrefix(plain);
@@ -128,6 +135,7 @@ public class groupMsg extends SimpleListenerHost {
         }
 
         if(plain.startsWith("pic down ")){
+            //回复图片的保存
             if(id != 0){
                 String url = getUrl(id);
                 if(url == null){
@@ -139,7 +147,7 @@ public class groupMsg extends SimpleListenerHost {
                 down(plain,image);
             }
             if(extended.containsKey(groupID) && !extended.get(groupID).contains(plain)){
-                extended.get(groupID).add(plain);
+                extended.get(groupID).add(getSuffix("pic down ",plain));
             }
             return;
         }
@@ -147,11 +155,11 @@ public class groupMsg extends SimpleListenerHost {
         user.remove(userKey);
     }
     private boolean down(String plain,Image image){
-        if(image != null){
-            downPic(getSuffix("pic down ",plain),Image.queryUrl(image));
-        }else {
+        if(image == null){
             send.sendText(messageConfig.getNoImage(),file);
+            return false;
         }
+        downPic(getSuffix("pic down ",plain),image.getImageType().getFormatName(),Image.queryUrl(image));
         return true;
     }
     private void CMD(String cmd){
@@ -241,6 +249,13 @@ public class groupMsg extends SimpleListenerHost {
                     send.sendText(msg,file);
                 }
                 return;
+            case "callTo":
+                if(file.callTo(tag)){
+                    send.sendTagText(messageConfig.getSuccessedAdd(),tag,file);
+                }else {
+                    send.sendTagText(messageConfig.getNoTag(),tag,file);
+                }
+                return;
             case "listTagPic":
                 if(!tagList.containsKey(tag)){
                     send.sendText(messageConfig.getNoTag(), file);
@@ -262,9 +277,9 @@ public class groupMsg extends SimpleListenerHost {
     private String getSuffix(String prefix,String plain){
         return plain.substring(prefix.length());
     }
-    private void judgeTag(String tag){
-
-    }
+//    private void judgeTag(String tag){
+//
+//    }
     private String judgePrefix(String msg){
         for (String prefix : prefixCMD){
             if(msg.startsWith(prefix)){
@@ -281,14 +296,16 @@ public class groupMsg extends SimpleListenerHost {
         }
         Image image = file.getBot().getGroup(file.getGroup()).uploadImage(ExternalResource.create(file.getImage()).toAutoCloseable());
         send.sendImage(image,file);
-
     }
-    private void downPic(String tag,String url) {
+    private void downPic(String tag,String type,String url) {
         if (tag == null||tag == ""){
             send.sendTagText(messageConfig.getNoTag(),tag,file);
             return;
         }
-        String msg = file.downPic(tag.replace(" ","").replace("\n",""), url);
+        if(type.equals("UNKNOWN")){
+            send.sendText(messageConfig.getNotGetUrl(),file);
+        }
+        String msg = file.downPic(tag.replace(" ","").replace("\n",""),type,url);
         send.sendText(msg,file);
     }
     private void addUrl(int id,String image){

@@ -14,6 +14,9 @@
 ![down](/READMEPic/down.png)
 
 ![helpCMD](/READMEPic/helpCMD.png)
+
+![call](/READMEPic/call.png)
+
 ## 指令
 ### 分为两种指令集
 一种是利用拥有权限的指令集的方法，需要引入[chat-Command](https://github.com/project-mirai/chat-command)进行使用  
@@ -53,9 +56,14 @@
 
 对于添加Tag到群下(下面用test代替tag)
 pic addTag test 创建test的tag(其实用pic down可以直接创建加存储test)
-pic down test 一张图片(加入图片  如果没有可以先跳过)
+pic down test 一张图片(下载图片到本地 如果没有可以先跳过)
 pic extendTo test 在要加test的群使用这个指令
+
+上面的话可以直接用pic down tag来直接三步走完
+
 然后使用pic get test 或者 来张test 就可以获取图片了
+如果需要直接出图片的Tag
+可以使用pic callTo test 就可以直接发送 test 出图片
 
 如若有什么问题可以先试试其中的指令，会有一定的提示，目前文档还在开发中
 ```
@@ -72,6 +80,14 @@ imagePath: ''
 # 也就是如果设置多的话，以往消息就能够获取到图片进行下载
 # 但是相对应的所占内存会变高
 mapSize: 30
+# 是否开启发送tag就出图片
+enableTag: true
+# 存储抽帧后的GIF图进行随机化
+# 实验中...
+enableGIF: false
+# 抽帧限制
+# 就是当是GIF分解的时候，多少帧抽一次
+interval: 1
 # 启用群聊(可以利用指令集进行更改)
 Group: 
   - 1234
@@ -96,4 +112,10 @@ againCMD:
 ## 更新
 `v0.2.0 customPic` 更新了可以使用QQ的**回复**功能进行下载图片     
 `使用方法` 回复然后输入pic down tag即可 然后又添加了一个配置  
-`mapSize` 这个就是能存多少张图片缓存 具体看上面的配置文件解析
+`mapSize` 这个就是能存多少张图片缓存 具体看上面的配置文件解析    
+        
+`v0.3.0 customPic` 增加了pic down tag可以直接在当前群进行权限添加  
+然后更新了关于gif图片的灵活使用，也就是将gif图片进行抽帧处理成静态png图片       
+`使用方法` 在config的配置 将`enableGIF`设置为 true 然后下载gif图片即可
+`interval` 就是用来显示多少帧抽出一个
+

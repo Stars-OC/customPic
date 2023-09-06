@@ -8,6 +8,8 @@ import net.mamoe.mirai.console.data.value
 object imageData : AutoSavePluginData("imageData") {
     @ValueDescription("存储tag对应的图片")
     val list : Map<String,List<String>> by value()
+    @ValueDescription("存储可以直接打出tag就出来的tag图片")
+    val call : Set<String> by value()
     @ValueDescription("存储群拥有的tag\n只能存储tag")
     val extended : Map<Long,Set<String>> by value()
 }

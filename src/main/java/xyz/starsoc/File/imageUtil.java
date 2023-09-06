@@ -3,16 +3,20 @@ package xyz.starsoc.File;
 import xyz.starsoc.CustomPic;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Set;
 
 public class imageUtil {
     private static String imagePath;
-    private static File file;
-    private static Set<String> list = imageList.INSTANCE.getList();
+    private File file;
+    private Set<String> list = imageList.INSTANCE.getList();
+    private int interval = config.INSTANCE.getInterval();
     public imageUtil(String imagePath){
         this.imagePath = imagePath;
 
@@ -22,14 +26,14 @@ public class imageUtil {
         //CustomPic.imagePath = this.imagePath;
         createFile();
     }
-    public Boolean addImage(String pic,String url) {
+    public boolean addUrlImage(String pic,String url) {
+        //将进行图片格式的自定义化
         if(pic == null){
             return false;
         }
-        BufferedImage buf = null;
         File file = new File(imagePath + "/" +  pic + ".png");
         try {
-            buf = ImageIO.read(new URL(url));
+            BufferedImage buf = ImageIO.read(new URL(url));
             if(buf != null){
                 ImageIO.write(buf,"png",file);
             }
@@ -40,8 +44,49 @@ public class imageUtil {
         list.add(pic);
         return true;
     }
+    public int addUrlGIF(int num, String tag, String url){
+        if(tag == null){
+            return 0;
+        }
+        try {
+            ImageInputStream inputStream = ImageIO.createImageInputStream(new URL(url).openStream());
 
-    public Boolean deleteImage(String pic) {
+            Iterator<ImageReader> imageReaders = ImageIO.getImageReaders(inputStream);
+            if (!imageReaders.hasNext()) {
+                return 0;
+            }
+            ImageReader reader = imageReaders.next();
+            reader.setInput(inputStream);
+            int count = 0;
+            while (true) {
+                try {
+                    ++count;
+                    if(num%interval != 0){
+                        continue;
+                    }
+                    BufferedImage frame = reader.read(num);
+
+                    if (frame == null) {
+                        break;
+                    }
+                    String pic = tag + "-" + num;
+                    File file = new File(imagePath + "/" + pic + ".png");
+                    ImageIO.write(frame, "PNG", file);
+                    list.add(pic);
+                    ++num;
+                } catch (IndexOutOfBoundsException e) {
+                    break;
+                }
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return num;
+    }
+
+    public boolean deleteImage(String pic) {
         if(pic == null || !list.contains(pic)){
             return false;
         }
