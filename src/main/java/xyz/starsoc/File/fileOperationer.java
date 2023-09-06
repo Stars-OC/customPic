@@ -120,7 +120,7 @@ public class fileOperationer {
     }
     public String downPic(String tag,String type,String url){
         if(!tagList.containsKey(tag) || tagList.get(tag).size() == 0){
-            if(type.equals("gif")){
+            if("gif".equals(type)){
                 tagList.put(tag,new ArrayList<>());
                 addGIF(tag, url);
             }else{
@@ -132,7 +132,7 @@ public class fileOperationer {
         if(url == null || url == ""){
             return message.getNoUrl();
         }
-        if(type.equals("gif")){
+        if("gif".equals(type)){
             if(!addGIF(tag, url)){
                 return "error";
             }

@@ -1,5 +1,6 @@
 package xyz.starsoc.Event;
 
+import com.sun.org.apache.xerces.internal.impl.xs.identity.Selector;
 import kotlin.coroutines.CoroutineContext;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventHandler;
@@ -14,6 +15,8 @@ import xyz.starsoc.Message.send;
 
 import java.sql.SQLOutput;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class groupMsg extends SimpleListenerHost {
     private config config = xyz.starsoc.File.config.INSTANCE;
@@ -61,7 +64,10 @@ public class groupMsg extends SimpleListenerHost {
                 //存储之前的图片 方便后面引用回复
                 imageId = ((Image) message).getImageId();
                 image = Image.fromId(imageId);
-
+                System.out.println(image.serializeToMiraiCode());
+                System.out.println(image.getImageType());
+                System.out.println(image.getImageType().name());
+                System.out.println(image.getImageType().toString());
                 //System.out.println(Image.queryUrl(image));
             }else if(message instanceof QuoteReply){
                 QuoteReply reply = (QuoteReply) message;
@@ -159,8 +165,20 @@ public class groupMsg extends SimpleListenerHost {
             send.sendText(messageConfig.getNoImage(),file);
             return false;
         }
-        downPic(getSuffix("pic down ",plain),image.getImageType().getFormatName(),Image.queryUrl(image));
+        String type = type(image.serializeToMiraiCode());
+        if(type == null){
+            type = "png";
+        }
+        downPic(getSuffix("pic down ",plain),type,Image.queryUrl(image));
         return true;
+    }
+    private String type(String code){
+        Pattern pattern = Pattern.compile("\\.([^\\.]+[^]])");
+        Matcher matcher = pattern.matcher(code);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
     private void CMD(String cmd){
         String[] command = cmd.split(" ");
@@ -302,8 +320,10 @@ public class groupMsg extends SimpleListenerHost {
             send.sendTagText(messageConfig.getNoTag(),tag,file);
             return;
         }
+        System.out.println(type);
         if(type.equals("UNKNOWN")){
             send.sendText(messageConfig.getNotGetUrl(),file);
+            return;
         }
         String msg = file.downPic(tag.replace(" ","").replace("\n",""),type,url);
         send.sendText(msg,file);
