@@ -85,6 +85,8 @@ enableTag: true
 # 存储抽帧后的GIF图进行随机化
 # 实验中...
 enableGIF: false
+# 是否启用随机图片
+enableRandom: true
 # 抽帧限制
 # 就是当是GIF分解的时候，多少帧抽一次
 interval: 1
@@ -103,6 +105,9 @@ prefixCMD:
 againCMD: 
   - 再来一张
   - again
+# 获取随机图片的命令
+randomCMD: 
+  - 随机图片
 ```
 
 ## 后文
@@ -118,4 +123,7 @@ againCMD:
 然后更新了关于gif图片的灵活使用，也就是将gif图片进行抽帧处理成静态png图片       
 `使用方法` 在config的配置 将`enableGIF`设置为 true 然后下载gif图片即可
 `interval` 就是用来显示多少帧抽出一个
+`enableTag` 设置为 true 可以启用用tag直接出图片的效果
+`enableRandom` 设置为 true 可以启用随机图片的效果
+`randomCMD` 下面是随机获取图片的命令
 
