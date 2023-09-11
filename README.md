@@ -120,10 +120,10 @@ randomCMD:
 `mapSize` 这个就是能存多少张图片缓存 具体看上面的配置文件解析    
         
 `v0.3.0 customPic` 增加了pic down tag可以直接在当前群进行权限添加  
-然后更新了关于gif图片的灵活使用，也就是将gif图片进行抽帧处理成静态png图片       
-`使用方法` 在config的配置 将`enableGIF`设置为 true 然后下载gif图片即可
-`interval` 就是用来显示多少帧抽出一个
-`enableTag` 设置为 true 可以启用用tag直接出图片的效果
-`enableRandom` 设置为 true 可以启用随机图片的效果
-`randomCMD` 下面是随机获取图片的命令
+然后更新了关于gif图片的灵活使用，也就是将gif图片进行抽帧处理成静态png图片           
+`使用方法` 在config的配置 将`enableGIF`设置为 true 然后下载gif图片即可    
+`interval` 就是用来显示多少帧抽出一个    
+`enableTag` 设置为 true 可以启用用tag直接出图片的效果    
+`enableRandom` 设置为 true 可以启用随机图片的效果    
+`randomCMD` 下面是随机获取图片的命令    
 
