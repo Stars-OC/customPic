@@ -1,6 +1,5 @@
 package xyz.starsoc.Event;
 
-import com.sun.org.apache.xerces.internal.impl.xs.identity.Selector;
 import kotlin.coroutines.CoroutineContext;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventHandler;
@@ -13,7 +12,6 @@ import xyz.starsoc.CustomPic;
 import xyz.starsoc.File.*;
 import xyz.starsoc.Message.send;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,7 +89,7 @@ public class groupMsg extends SimpleListenerHost {
             ++CustomPic.files;
             files.put(groupID,file);
         }
-        if(call.contains(plain)){
+        if(config.getEnableTag() && call.contains(plain)){
             getPic(plain);
             user.put(userKey,plain);
             return;
@@ -162,7 +160,7 @@ public class groupMsg extends SimpleListenerHost {
             return false;
         }
         String type = type(image.serializeToMiraiCode());
-        if(type == null){
+        if(type.equals("gif") && config.getEnableGIF()){
             type = "png";
         }
         downPic(getSuffix("pic down ",plain),type,Image.queryUrl(image));
