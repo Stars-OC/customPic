@@ -19,6 +19,7 @@ public class fileOperationer {
     private Map<Long, Set<String>> extended = imgData.getExtended();
     private Set<String> set;
     private imageUtil imageUtil = CustomPic.imageUtil;
+    private Set<String> list = imageList.INSTANCE.getList();
     private Set<String> call = imgData.getCall();
 
     private File image;
@@ -56,6 +57,17 @@ public class fileOperationer {
         }
         List<String> list = tagList.get(tag);
         return list.get((int)(Math.random()*list.size()));
+    }
+    public String randomPic(){
+        int random = (int) (Math.random() * list.size());
+        int i = 0;
+        String pic = "";
+        for(String picPath : list){
+            if(++i == random){
+                pic = picPath;
+            }
+        }
+        return pic;
     }
     private void initTagList(String tag){
         List<String> list = new ArrayList<>();

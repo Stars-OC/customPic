@@ -15,6 +15,8 @@ object config : AutoSavePluginConfig("config") {
     val enableTag by value(true)
     @ValueDescription("存储抽帧后的GIF图进行随机化\n实验中...")
     val enableGIF by value(false)
+    @ValueDescription("是否启用随机图片")
+    val enableRandom by value(true)
     @ValueDescription("抽帧限制\n就是当是GIF分解的时候，多少帧抽一次")
     val interval by value(1)
     @ValueDescription("启用群聊")
@@ -25,5 +27,7 @@ object config : AutoSavePluginConfig("config") {
     val prefixCMD : Set<String> by value(mutableSetOf("来张","pic get "))
     @ValueDescription("再次获取桶tag图片命令")
     val againCMD : Set<String> by value(mutableSetOf("再来一张","again"))
+    @ValueDescription("获取随机图片的命令")
+    val randomCMD : Set<String> by value(mutableSetOf("随机图片"))
 
 }

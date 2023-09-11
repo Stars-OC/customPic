@@ -89,11 +89,18 @@ public class groupMsg extends SimpleListenerHost {
             ++CustomPic.files;
             files.put(groupID,file);
         }
+
+        if(config.getEnableRandom() && config.getRandomCMD().contains(plain)){
+            getPic(file.randomPic());
+            return;
+        }
+
         if(config.getEnableTag() && call.contains(plain)){
             getPic(plain);
             user.put(userKey,plain);
             return;
         }
+
         //getPic
         String prefix = judgePrefix(plain);
         if (prefix != null){
