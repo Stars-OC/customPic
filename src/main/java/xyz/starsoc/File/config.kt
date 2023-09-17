@@ -25,7 +25,7 @@ object config : AutoSavePluginConfig("config") {
     val permission : Set<String> by value(mutableSetOf("1234:123456"))
     @ValueDescription("获取图片命令前缀")
     val prefixCMD : Set<String> by value(mutableSetOf("来张","pic get "))
-    @ValueDescription("再次获取桶tag图片命令")
+    @ValueDescription("再次获取同tag图片命令")
     val againCMD : Set<String> by value(mutableSetOf("再来一张","again"))
     @ValueDescription("获取随机图片的命令")
     val randomCMD : Set<String> by value(mutableSetOf("随机图片"))
